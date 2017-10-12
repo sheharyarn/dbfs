@@ -11,10 +11,10 @@ config :dbfs,
   ecto_repos: [DBFS.Repo]
 
 # Configures the endpoint
-config :dbfs, DBFSWeb.Endpoint,
+config :dbfs, DBFS.Web.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "CAursn/+KNVbfFeXMCT1hJrsmB0WS9jmPgKn63yMRYaEHq6ljwS2Jc3oaqsDZdrg",
-  render_errors: [view: DBFSWeb.ErrorView, accepts: ~w(html json)],
+  render_errors: [view: DBFS.Web.ErrorView, accepts: ~w(html json)],
   pubsub: [name: DBFS.PubSub,
            adapter: Phoenix.PubSub.PG2]
 

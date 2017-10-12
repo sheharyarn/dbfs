@@ -1,5 +1,5 @@
-defmodule DBFSWeb.PageControllerTest do
-  use DBFSWeb.ConnCase
+defmodule DBFS.Web.PageControllerTest do
+  use DBFS.Web.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

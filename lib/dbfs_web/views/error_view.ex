@@ -1,5 +1,5 @@
-defmodule DBFSWeb.ErrorView do
-  use DBFSWeb, :view
+defmodule DBFS.Web.ErrorView do
+  use DBFS.Web, :view
 
   def render("404.html", _assigns) do
     "Page not found"

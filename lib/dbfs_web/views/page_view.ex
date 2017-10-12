@@ -1,3 +1,3 @@
-defmodule DBFSWeb.PageView do
-  use DBFSWeb, :view
+defmodule DBFS.Web.PageView do
+  use DBFS.Web, :view
 end

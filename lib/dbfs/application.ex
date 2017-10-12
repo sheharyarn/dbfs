@@ -11,7 +11,7 @@ defmodule DBFS.Application do
       # Start the Ecto repository
       supervisor(DBFS.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(DBFSWeb.Endpoint, []),
+      supervisor(DBFS.Web.Endpoint, []),
       # Start your own worker by calling: DBFS.Worker.start_link(arg1, arg2, arg3)
       # worker(DBFS.Worker, [arg1, arg2, arg3]),
     ]
@@ -25,7 +25,7 @@ defmodule DBFS.Application do
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    DBFSWeb.Endpoint.config_change(changed, removed)
+    DBFS.Web.Endpoint.config_change(changed, removed)
     :ok
   end
 end

@@ -1,7 +1,7 @@
-defmodule DBFSWeb.Endpoint do
+defmodule DBFS.Web.Endpoint do
   use Phoenix.Endpoint, otp_app: :dbfs
 
-  socket "/socket", DBFSWeb.UserSocket
+  socket "/socket", DBFS.Web.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -38,7 +38,7 @@ defmodule DBFSWeb.Endpoint do
     key: "_dbfs_key",
     signing_salt: "rq2FqqfY"
 
-  plug DBFSWeb.Router
+  plug DBFS.Web.Router
 
   @doc """
   Callback invoked for dynamically configuring the endpoint.

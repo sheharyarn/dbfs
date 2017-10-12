@@ -1,12 +1,12 @@
-defmodule DBFSWeb do
+defmodule DBFS.Web do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use DBFSWeb, :controller
-      use DBFSWeb, :view
+      use DBFS.Web, :controller
+      use DBFS.Web, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,17 +19,17 @@ defmodule DBFSWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: DBFSWeb
+      use Phoenix.Controller, namespace: DBFS.Web
       import Plug.Conn
-      import DBFSWeb.Router.Helpers
-      import DBFSWeb.Gettext
+      import DBFS.Web.Router.Helpers
+      import DBFS.Web.Gettext
     end
   end
 
   def view do
     quote do
       use Phoenix.View, root: "lib/dbfs_web/templates",
-                        namespace: DBFSWeb
+                        namespace: DBFS.Web
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
@@ -37,9 +37,9 @@ defmodule DBFSWeb do
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import DBFSWeb.Router.Helpers
-      import DBFSWeb.ErrorHelpers
-      import DBFSWeb.Gettext
+      import DBFS.Web.Router.Helpers
+      import DBFS.Web.ErrorHelpers
+      import DBFS.Web.Gettext
     end
   end
 
@@ -54,7 +54,7 @@ defmodule DBFSWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import DBFSWeb.Gettext
+      import DBFS.Web.Gettext
     end
   end
 

@@ -1,3 +1,3 @@
-defmodule DBFSWeb.PageViewTest do
-  use DBFSWeb.ConnCase, async: true
+defmodule DBFS.Web.PageViewTest do
+  use DBFS.Web.ConnCase, async: true
 end

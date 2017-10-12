@@ -1,5 +1,5 @@
-defmodule DBFSWeb.Router do
-  use DBFSWeb, :router
+defmodule DBFS.Web.Router do
+  use DBFS.Web, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -13,14 +13,14 @@ defmodule DBFSWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", DBFSWeb do
+  scope "/", DBFS.Web do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", DBFSWeb do
+  # scope "/api", DBFS.Web do
   #   pipe_through :api
   # end
 end

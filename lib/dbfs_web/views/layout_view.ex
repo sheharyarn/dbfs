@@ -1,3 +1,3 @@
-defmodule DBFSWeb.LayoutView do
-  use DBFSWeb, :view
+defmodule DBFS.Web.LayoutView do
+  use DBFS.Web, :view
 end

@@ -1,4 +1,4 @@
-defmodule DBFSWeb.ErrorHelpers do
+defmodule DBFS.Web.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -32,9 +32,9 @@ defmodule DBFSWeb.ErrorHelpers do
     #     dgettext "errors", "is invalid"
     #
     if count = opts[:count] do
-      Gettext.dngettext(DBFSWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(DBFS.Web.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(DBFSWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(DBFS.Web.Gettext, "errors", msg, opts)
     end
   end
 end
