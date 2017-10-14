@@ -7,6 +7,9 @@ defmodule DBFS.Crypto do
 
   @doc "Calculate a block's hash"
   def hash(%Block{} = block) do
+    block
+    |> payload(@hash_fields)
+    |> sha256
   end
 
   def hash!(%Block{} = block) do
@@ -42,4 +45,7 @@ defmodule DBFS.Crypto do
     |> Poison.encode!
   end
 
+  defp sha256(payload) do
+    :crypto.hash(:sha256, payload) |> Base.encode16
+  end
 end
