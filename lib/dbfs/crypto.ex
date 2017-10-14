@@ -1,10 +1,12 @@
 defmodule DBFS.Crypto do
   alias DBFS.Block
 
+  @sign_fields [:data, :type, :prev, :creator, :timestamp]
+  @hash_fields [:signature | @sign_fields]
+
 
   @doc "Calculate a block's hash"
   def hash(%Block{} = block) do
-    # TODO: Implement
   end
 
   def hash!(%Block{} = block) do
@@ -15,6 +17,9 @@ defmodule DBFS.Crypto do
 
   @doc "Sign block data using a private key"
   def sign(%Block{} = block, private_key) do
+    block
+    |> payload(@sign_fields)
+    |> RsaEx.sign(private_key)
   end
 
   def sign!(%Block{} = block, private_key) do
@@ -25,6 +30,16 @@ defmodule DBFS.Crypto do
 
   @doc "Verify a block using the public key present in it"
   def verify(%Block{} = block) do
+  end
+
+
+
+  # Private Helpers
+
+  defp payload(block, fields) do
+    block
+    |> Map.take(fields)
+    |> Poison.encode!
   end
 
 end
