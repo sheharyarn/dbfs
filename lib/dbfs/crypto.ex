@@ -1,7 +1,7 @@
 defmodule DBFS.Crypto do
   alias DBFS.Block
 
-  @sign_fields [:data, :type, :prev, :creator, :timestamp]
+  @sign_fields [:data, :type, :prev, :timestamp]
   @hash_fields [:signature | @sign_fields]
 
 
@@ -23,10 +23,13 @@ defmodule DBFS.Crypto do
     block
     |> payload(@sign_fields)
     |> RsaEx.sign(private_key)
+    |> elem(1)
   end
 
   def sign!(%Block{} = block, private_key) do
-    %{ block | signature: sign(block, private_key) }
+    block
+    |> Map.put(:creator,   public_key(private_key))
+    |> Map.put(:signature, sign(block, private_key))
   end
 
 
@@ -48,4 +51,11 @@ defmodule DBFS.Crypto do
   defp sha256(payload) do
     :crypto.hash(:sha256, payload) |> Base.encode16
   end
+
+  defp public_key(private_key) do
+    private_key
+    |> RsaEx.generate_public_key
+    |> elem(1)
+  end
+
 end
