@@ -4,11 +4,11 @@ defmodule DBFS.Block do
 
   @moduledoc "Basic building block of our Blockchain"
 
-  @allowed_types [:create, :delete]
+  @allowed_types [:file_create, :file_delete]
   @zero_type :zero
   @all_types [@zero_type | @allowed_types]
 
-  defstruct [:type, :prev, :data, :hash, :creator, :timestamp]
+  defstruct [:type, :prev, :data, :signature, :hash, :creator, :timestamp]
 
 
 
@@ -24,10 +24,8 @@ defmodule DBFS.Block do
 
 
   @doc "Create a new Block from a Blockchain or an existing one"
-  def new(%Blockchain{chain: chain}) do
-    chain
-    |> hd
-    |> new
+  def new(%Blockchain{} = chain) do
+    Blockchain.head(chain) |> new
   end
 
   def new(%Block{hash: hash}) do
@@ -57,12 +55,19 @@ defmodule DBFS.Block do
 
   @doc "Calculate a block's hash"
   def hash(%Block{} = block) do
+    # TODO: Implement
   end
 
 
   @doc "Calculate and set hash of the block"
-  def hash!(%Block{} = block) do
+  def set_hash!(%Block{} = block) do
     %{ block | hash: hash(block) }
+  end
+
+
+
+  @doc "Calculate signature of block data"
+  def signature(%Block{} = block) do
   end
 
 end
