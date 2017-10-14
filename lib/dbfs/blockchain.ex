@@ -11,7 +11,7 @@ defmodule DBFS.Blockchain do
 
 
   def new do
-    %@module{chain: [Block.zero()], count: 1}
+    %Blockchain{chain: [Block.zero()], count: 1}
   end
 
 

@@ -1,12 +1,18 @@
 defmodule DBFS.Block do
+  alias DBFS.Crypto
   alias DBFS.Block
   alias DBFS.Blockchain
 
   @moduledoc "Basic building block of our Blockchain"
 
   @allowed_types [:file_create, :file_delete]
-  @zero_type :zero
   @all_types [@zero_type | @allowed_types]
+
+  @zero_type   :zero
+  @zero_hash   Application.get_env(:dbfs, :zero_hash)
+  @zero_pvtkey Application.get_env(:dbfs, :zero_pvtkey)
+  @zero_pubkey Application.get_env(:dbfs, :zero_pubkey)
+
 
   defstruct [:type, :prev, :data, :signature, :hash, :creator, :timestamp]
 
@@ -14,11 +20,18 @@ defmodule DBFS.Block do
 
   @doc "Block Zero a.k.a starting point of the blockchain"
   def zero do
-    %Block{
-      type: @zero_type,
-      prev: Application.get_env(:dbfs, :zero_hash),
-      timestamp: NaiveDateTime.utc_now()
-    }
+    block =
+      %Block{
+        data: {},
+        type: @zero_type,
+        prev: @zero_hash,
+        creator: @zero_pubkey,
+        timestamp: NaiveDateTime.utc_now()
+      }
+
+    block
+    |> Crypto.sign!(@zero_pvtkey)
+    |> Crypto.hash!
   end
 
 
@@ -41,10 +54,13 @@ defmodule DBFS.Block do
   def validate(%Block{hash: hash, prev: reference} = block, prev_hash) do
     cond do
       (reference != prev_hash) ->
-        {:error, :unmatched_reference}
+        {:error, :invalid_reference}
 
-      (hash(block) != hash) ->
+      (Crypto.hash(block) != hash) ->
         {:error, :invalid_hash}
+
+      (Crypto.verify(block) != :ok) ->
+        {:error, :invalid_signature}
 
       true ->
         :ok
@@ -52,22 +68,5 @@ defmodule DBFS.Block do
   end
 
 
-
-  @doc "Calculate a block's hash"
-  def hash(%Block{} = block) do
-    # TODO: Implement
-  end
-
-
-  @doc "Calculate and set hash of the block"
-  def set_hash!(%Block{} = block) do
-    %{ block | hash: hash(block) }
-  end
-
-
-
-  @doc "Calculate signature of block data"
-  def signature(%Block{} = block) do
-  end
 
 end
