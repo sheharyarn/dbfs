@@ -22,7 +22,7 @@ defmodule DBFS.Block do
   def zero do
     block =
       %Block{
-        data: {},
+        data: %{},
         type: @zero_type,
         prev: @zero_hash,
         creator: @zero_pubkey,

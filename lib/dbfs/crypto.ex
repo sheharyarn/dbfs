@@ -36,6 +36,14 @@ defmodule DBFS.Crypto do
 
   @doc "Verify a block using the public key present in it"
   def verify(%Block{} = block) do
+    {:ok, valid} =
+      block
+      |> payload(@sign_fields)
+      |> RsaEx.verify(block.signature, block.creator)
+
+    if valid,
+      do:   :ok,
+      else: :invalid
   end
 
 
