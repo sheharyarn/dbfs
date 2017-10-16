@@ -48,6 +48,10 @@ defmodule DBFS.Block do
 
 
   @doc "Validate a block using previous block's hash"
+  def validate(%Block{prev: prev} = block) do
+    validate(block, prev)
+  end
+
   def validate(%Block{} = block, %Block{hash: prev_hash}) do
     validate(block, prev_hash)
   end
@@ -67,7 +71,6 @@ defmodule DBFS.Block do
         :ok
     end
   end
-
 
 
 end
