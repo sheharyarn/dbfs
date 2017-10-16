@@ -5,6 +5,7 @@ defmodule DBFS.Crypto do
   @hash_fields [:signature | @sign_fields]
 
 
+
   @doc "Calculate a block's hash"
   def hash(%Block{} = block) do
     block
@@ -48,7 +49,7 @@ defmodule DBFS.Crypto do
 
 
 
-  # Private Helpers
+  # Helpers
 
   defp payload(block, fields) do
     block
@@ -56,11 +57,11 @@ defmodule DBFS.Crypto do
     |> Poison.encode!
   end
 
-  defp sha256(payload) do
+  def sha256(payload) do
     :crypto.hash(:sha256, payload) |> Base.encode16
   end
 
-  defp public_key(private_key) do
+  def public_key(private_key) do
     private_key
     |> RsaEx.generate_public_key
     |> elem(1)

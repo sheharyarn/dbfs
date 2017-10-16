@@ -3,18 +3,19 @@ defmodule DBFS.Block do
   alias DBFS.Block
   alias DBFS.Blockchain
 
-  @moduledoc "Basic building block of our Blockchain"
+  defstruct [:type, :prev, :data, :signature, :hash, :creator, :timestamp]
+
+
+  @zero %{
+    type:   :zero,
+    pvtkey: Application.get_env(:dbfs, :zero_key),
+    pubkey: Crypto.public_key(Application.get_env(:dbfs, :zero_key)),
+    hash:   Crypto.sha256(Application.get_env(:dbfs, :zero_cookie)),
+  }
 
   @allowed_types [:file_create, :file_delete]
-  @all_types [@zero_type | @allowed_types]
+  @all_types [@zero.type | @allowed_types]
 
-  @zero_type   :zero
-  @zero_hash   Application.get_env(:dbfs, :zero_hash)
-  @zero_pvtkey Application.get_env(:dbfs, :zero_pvtkey)
-  @zero_pubkey Application.get_env(:dbfs, :zero_pubkey)
-
-
-  defstruct [:type, :prev, :data, :signature, :hash, :creator, :timestamp]
 
 
 
@@ -23,14 +24,14 @@ defmodule DBFS.Block do
     block =
       %Block{
         data: %{},
-        type: @zero_type,
-        prev: @zero_hash,
-        creator: @zero_pubkey,
+        type: @zero.type,
+        prev: @zero.hash,
+        creator: @zero.pubkey,
         timestamp: NaiveDateTime.utc_now()
       }
 
     block
-    |> Crypto.sign!(@zero_pvtkey)
+    |> Crypto.sign!(@zero.pvtkey)
     |> Crypto.hash!
   end
 

@@ -5,10 +5,20 @@
 # is restricted to this project.
 use Mix.Config
 
+zero_key = File.read!("priv/keys/zero.pvt")
+
+
 # General application configuration
 config :dbfs,
   namespace: DBFS,
   ecto_repos: [DBFS.Repo]
+
+
+# Crypto Configs
+config :dbfs,
+  zero_cookie: "DBFS",
+  zero_key: File.read!("priv/keys/zero.pvt")
+
 
 # Configures the endpoint
 config :dbfs, DBFS.Web.Endpoint,
@@ -18,10 +28,12 @@ config :dbfs, DBFS.Web.Endpoint,
   pubsub: [name: DBFS.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
+
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
