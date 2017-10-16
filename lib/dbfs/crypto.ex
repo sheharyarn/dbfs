@@ -25,6 +25,7 @@ defmodule DBFS.Crypto do
     |> payload(@sign_fields)
     |> RsaEx.sign(private_key)
     |> elem(1)
+    |> encode
   end
 
   def sign!(%Block{} = block, private_key) do
@@ -37,10 +38,13 @@ defmodule DBFS.Crypto do
 
   @doc "Verify a block using the public key present in it"
   def verify(%Block{} = block) do
+    sign = decode(block.signature)
+    key  = decode(block.creator)
+
     {:ok, valid} =
       block
       |> payload(@sign_fields)
-      |> RsaEx.verify(block.signature, block.creator)
+      |> RsaEx.verify(sign, key)
 
     if valid,
       do:   :ok,
@@ -57,14 +61,18 @@ defmodule DBFS.Crypto do
     |> Poison.encode!
   end
 
-  def sha256(payload) do
-    :crypto.hash(:sha256, payload) |> Base.encode16
+  def sha256(binary) do
+    :crypto.hash(:sha256, binary) |> encode
   end
 
   def public_key(private_key) do
     private_key
     |> RsaEx.generate_public_key
     |> elem(1)
+    |> encode
   end
+
+  def encode(binary), do: Base.encode16(binary)
+  def decode(binary), do: Base.decode16!(binary)
 
 end
