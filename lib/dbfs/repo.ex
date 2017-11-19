@@ -16,7 +16,10 @@ defmodule DBFS.Repo do
         use Ecto.Schema
         use Ecto.Rut, repo: DBFS.Repo
 
-        alias Enroll.Repo
+        import  Ecto.Changeset
+        require Ecto.Query
+
+        alias DBFS.Repo
       end
     end
   end
