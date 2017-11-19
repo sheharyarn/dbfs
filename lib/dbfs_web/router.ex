@@ -1,26 +1,30 @@
 defmodule DBFS.Web.Router do
   use DBFS.Web, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
+
+  # API Pipeline
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", DBFS.Web do
-    pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+
+  # API Routes
+
+  scope "/", DBFS.Web.Controllers do
+    scope "/api/v1", API.V1 do
+      pipe_through :api
+
+
+      get "/",  Main,   :index
+
+      scope "/blocks" do
+        post "/",       Block, :create
+        get  "/:hash",  Block, :show
+      end
+
+    end
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", DBFS.Web do
-  #   pipe_through :api
-  # end
 end
