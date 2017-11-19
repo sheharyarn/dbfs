@@ -8,4 +8,17 @@ defmodule DBFS.Repo do
   def init(_, opts) do
     {:ok, Keyword.put(opts, :url, System.get_env("DATABASE_URL"))}
   end
+
+
+  defmodule Schema do
+    defmacro __using__(_opts) do
+      quote do
+        use Ecto.Schema
+        use Ecto.Rut, repo: DBFS.Repo
+
+        alias Enroll.Repo
+      end
+    end
+  end
+
 end
