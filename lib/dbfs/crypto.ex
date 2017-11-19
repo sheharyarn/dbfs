@@ -2,7 +2,7 @@ defmodule DBFS.Crypto do
   alias DBFS.Block
 
   @sign_fields [:data, :type, :prev, :timestamp]
-  @hash_fields [:signature | @sign_fields]
+  @hash_fields [:creator, :signature | @sign_fields]
 
 
 

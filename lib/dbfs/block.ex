@@ -14,6 +14,7 @@ defmodule DBFS.Block do
   }
 
   @allowed_types [:file_create, :file_delete]
+  @allowed_fields [:type, :data, :creator]
   @all_types [@zero.type | @allowed_types]
 
 
@@ -38,11 +39,18 @@ defmodule DBFS.Block do
 
 
   @doc "Create a new Block from a Blockchain or an existing one"
-  def new(%Blockchain{} = chain) do
-    Blockchain.head(chain) |> new
+  def new(%Blockchain{} = chain, opts) do
+    Blockchain.head(chain) |> new(opts)
   end
 
-  def new(%Block{hash: hash}) do
+  def new(%Block{hash: hash}, opts) do
+    block =
+      %Block{
+        prev: hash,
+        timestamp: NaiveDateTime.utc_now(),
+      }
+
+    cast(block, opts)
   end
 
 
@@ -72,5 +80,19 @@ defmodule DBFS.Block do
     end
   end
 
+
+
+
+  # Private Helpers
+  # ---------------
+
+  defp cast(%Block{} = block, params) do
+    params =
+      params
+      |> Enum.into(%{})
+      |> Map.take(@allowed_fields)
+
+    Map.merge(block, params)
+  end
 
 end

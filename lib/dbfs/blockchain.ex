@@ -10,6 +10,7 @@ defmodule DBFS.Blockchain do
   defstruct [:chain, :count]
 
 
+  @doc "Create a new blockchain with a zero block"
   def new do
     %Blockchain{chain: [Block.zero()], count: 1}
   end
@@ -20,4 +21,9 @@ defmodule DBFS.Blockchain do
     head
   end
 
+
+  @doc "Add a new block to the chain"
+  def add(%Blockchain{} = bc, %Block{} = block) do
+    %{ bc | chain: [block | bc.chain], count: bc.count + 1 }
+  end
 end

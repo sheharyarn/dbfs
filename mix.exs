@@ -43,6 +43,7 @@ defmodule DBFS.Mixfile do
       {:cowboy, "~> 1.0"},
       {:ex_crypto, "~> 0.5.0"},
       {:rsa_ex, "~> 0.1"},
+      {:apex, "~> 0.3.5"},
     ]
   end
 
