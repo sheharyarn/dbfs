@@ -20,16 +20,21 @@ defmodule DBFS.Web do
   def controller do
     quote do
       use Phoenix.Controller, namespace: DBFS.Web
+
       import Plug.Conn
       import DBFS.Web.Router.Helpers
       import DBFS.Web.Gettext
+
+      plug BetterParams
     end
   end
 
+
   def view do
     quote do
-      use Phoenix.View, root: "lib/dbfs_web/templates",
-                        namespace: DBFS.Web
+      use Phoenix.View,
+        root: "lib/dbfs_web/templates",
+        namespace: DBFS.Web
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
@@ -43,6 +48,7 @@ defmodule DBFS.Web do
     end
   end
 
+
   def router do
     quote do
       use Phoenix.Router
@@ -51,6 +57,7 @@ defmodule DBFS.Web do
     end
   end
 
+
   def channel do
     quote do
       use Phoenix.Channel
@@ -58,10 +65,14 @@ defmodule DBFS.Web do
     end
   end
 
+
+
+
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
+
 end
