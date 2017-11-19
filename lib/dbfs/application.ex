@@ -14,6 +14,7 @@ defmodule DBFS.Application do
       supervisor(DBFS.Web.Endpoint, []),
       # Start your own worker by calling: DBFS.Worker.start_link(arg1, arg2, arg3)
       # worker(DBFS.Worker, [arg1, arg2, arg3]),
+      worker(DBFS.Blockchain.Server, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -26,4 +26,13 @@ defmodule DBFS.Blockchain do
   def add(%Blockchain{} = bc, %Block{} = block) do
     %{ bc | chain: [block | bc.chain], count: bc.count + 1 }
   end
+
+
+  def load(), do: nil
+
+
+  @doc "Normalize responses"
+  def normalize({:ok, term}),     do: {:ok, term}
+  def normalize({:error, error}), do: {:error, {:blockchain, error}}
+  def normalize(term),            do: {:error, {:blockchain, term}}
 end
