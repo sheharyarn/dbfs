@@ -1,9 +1,9 @@
 defmodule DBFS.Block do
+  use DBFS.Repo.Schema
+
   alias DBFS.Crypto
   alias DBFS.Block
   alias DBFS.Blockchain
-
-  defstruct [:type, :prev, :data, :signature, :hash, :creator, :timestamp]
 
 
   @zero %{
@@ -17,7 +17,48 @@ defmodule DBFS.Block do
   @allowed_fields [:type, :data, :creator]
   @all_types [@zero.type | @allowed_types]
 
+  @fields_required [:type, :data, :prev, :hash, :creator, :signature, :timestamp]
 
+
+  schema "blocks" do
+    field :type,      Enums.Block.Type
+    field :data,      :map
+    field :prev,      :string
+    field :hash,      :string
+    field :creator,   :string
+    field :signature, :string
+    filed :timestamp, :naive_datetime
+  end
+
+
+  def changeset(schema, params) do
+    schema
+    |> cast(params, @fields_required)
+    |> validate_required(@fields_required)
+    |> validate_hash
+  end
+
+
+  @doc "Get last block"
+  def last do
+    __MODULE__
+    |> Ecto.Query.last
+    |> Repo.one
+  end
+
+
+  defp validate_hash(changeset) do
+    prev  = last()
+    block = apply_changes(changeset)
+
+    case validate(block, prev) do
+      :ok ->
+        changeset
+
+      {:error, error} ->
+        add_error(changeset, :crypto, error)
+    end
+  end
 
 
   @doc "Block Zero a.k.a starting point of the blockchain"
@@ -80,19 +121,5 @@ defmodule DBFS.Block do
     end
   end
 
-
-
-
-  # Private Helpers
-  # ---------------
-
-  defp cast(%Block{} = block, params) do
-    params =
-      params
-      |> Enum.into(%{})
-      |> Map.take(@allowed_fields)
-
-    Map.merge(block, params)
-  end
 
 end
