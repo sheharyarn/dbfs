@@ -10,6 +10,18 @@ defmodule DBFS.Repo do
   end
 
 
+  # Define Application Enums
+  defmodule Enums do
+    import EctoEnum
+
+    defenum Block.Type,
+      zero:        0,
+      file_create: 1,
+      file_delete: 2
+  end
+
+
+  # Define Custom Schema Macro
   defmodule Schema do
     defmacro __using__(_opts) do
       quote do
@@ -20,6 +32,7 @@ defmodule DBFS.Repo do
         require Ecto.Query
 
         alias DBFS.Repo
+        alias DBFS.Repo.Enums
       end
     end
   end

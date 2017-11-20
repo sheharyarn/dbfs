@@ -44,6 +44,8 @@ defmodule DBFS.Mixfile do
       {:ex_crypto, "~> 0.5.0"},
       {:rsa_ex, "~> 0.1"},
       {:apex, "~> 0.3.5"},
+      {:ecto, "~> 2.2.6", override: true},
+      {:ecto_enum, "~> 1.0"},
       {:ecto_rut, "~> 1.2.2"},
       {:better_params, "~> 0.4.0"},
     ]
