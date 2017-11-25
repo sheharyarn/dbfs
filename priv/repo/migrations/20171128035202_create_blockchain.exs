@@ -11,8 +11,8 @@ defmodule DBFS.Repo.Migrations.CreateBlockchain do
       add :type,      :integer,        null: false
       add :prev,      :string,         null: false
       add :hash,      :string,         null: false
-      add :signature, :string,         null: false
-      add :creator,   :string,         null: false
+      add :signature, :text,           null: false
+      add :creator,   :text,           null: false
       add :data,      :map,            null: false, default: "{}"
     end
 

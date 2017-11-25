@@ -13,10 +13,6 @@ defmodule DBFS.Block do
     hash:   Crypto.sha256(Application.get_env(:dbfs, :zero_cookie)),
   }
 
-  @allowed_types [:file_create, :file_delete]
-  @allowed_fields [:type, :data, :creator]
-  @all_types [@zero.type | @allowed_types]
-
   @fields_required [:type, :data, :prev, :hash, :creator, :signature, :timestamp]
 
 
@@ -27,7 +23,7 @@ defmodule DBFS.Block do
     field :hash,      :string
     field :creator,   :string
     field :signature, :string
-    filed :timestamp, :naive_datetime
+    field :timestamp, :naive_datetime
   end
 
 
@@ -35,30 +31,17 @@ defmodule DBFS.Block do
     schema
     |> cast(params, @fields_required)
     |> validate_required(@fields_required)
-    |> validate_hash
+    |> validate
   end
 
 
   @doc "Get last block"
   def last do
-    __MODULE__
+    Block
     |> Ecto.Query.last
     |> Repo.one
   end
 
-
-  defp validate_hash(changeset) do
-    prev  = last()
-    block = apply_changes(changeset)
-
-    case validate(block, prev) do
-      :ok ->
-        changeset
-
-      {:error, error} ->
-        add_error(changeset, :crypto, error)
-    end
-  end
 
 
   @doc "Block Zero a.k.a starting point of the blockchain"
@@ -78,20 +61,15 @@ defmodule DBFS.Block do
   end
 
 
-
   @doc "Create a new Block from a Blockchain or an existing one"
-  def new(%Blockchain{} = chain, opts) do
-    Blockchain.head(chain) |> new(opts)
-  end
+  def new(%Block{hash: hash}, params \\ %{}) do
+    params =
+      params
+      |> Enum.into(%{})
+      |> Map.put(:prev, hash)
+      |> Map.put(:timestamp, NaiveDateTime.utc_now())
 
-  def new(%Block{hash: hash}, opts) do
-    block =
-      %Block{
-        prev: hash,
-        timestamp: NaiveDateTime.utc_now(),
-      }
-
-    cast(block, opts)
+    changeset(%Block{}, params)
   end
 
 
@@ -121,5 +99,17 @@ defmodule DBFS.Block do
     end
   end
 
+  def validate(%Ecto.Changeset{} = changeset) do
+    prev  = last()
+    block = apply_changes(changeset)
+
+    case validate(block, prev) do
+      :ok ->
+        changeset
+
+      {:error, error} ->
+        add_error(changeset, :crypto, to_string(error))
+    end
+  end
 
 end
