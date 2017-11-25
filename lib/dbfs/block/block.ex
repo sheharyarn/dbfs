@@ -27,7 +27,7 @@ defmodule DBFS.Block do
   end
 
 
-  def changeset(schema, params) do
+  def changeset(schema, params \\ %{}) do
     schema
     |> cast(params, @fields_required)
     |> validate_required(@fields_required)

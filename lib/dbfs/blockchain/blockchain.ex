@@ -1,4 +1,5 @@
 defmodule DBFS.Blockchain do
+  alias DBFS.Repo
   alias DBFS.Block
   alias DBFS.Blockchain
 
@@ -31,6 +32,26 @@ defmodule DBFS.Blockchain do
 
 
   def load(), do: nil
+
+  def initialize do
+    cond do
+      Blockchain.Schema.get ->
+        {:error, "Blockchain already exists"}
+
+      Block.last ->
+        {:error, "An orphan block exists in the database"}
+
+      true ->
+        zero =
+          Block.zero
+          |> Block.changeset
+          |> Ecto.Changeset.apply_changes
+          |> Repo.insert!
+
+        Blockchain.Schema.insert!(count: 1, last_hash: zero.hash)
+        {:ok, load()}
+    end
+  end
 
 
   @doc "Normalize responses"

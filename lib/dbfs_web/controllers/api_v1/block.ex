@@ -7,6 +7,11 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
   end
 
 
+  @doc "GET: Block Data"
+  def data(conn, %{hash: hash}) do
+  end
+
+
   @doc "POST: Create a new block"
   def create(conn, %{data: data, block: block}) do
   end

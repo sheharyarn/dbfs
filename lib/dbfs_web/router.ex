@@ -17,11 +17,12 @@ defmodule DBFS.Web.Router do
       pipe_through :api
 
 
-      get "/",  Main,   :index
+      get "/", Main, :index
 
       scope "/blocks" do
-        post "/",       Block, :create
-        get  "/:hash",  Block, :show
+        post "/",            Block, :create
+        get  "/:hash",       Block, :show
+        get  "/:hash/data",  Block, :data
       end
 
     end
