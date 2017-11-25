@@ -7,20 +7,20 @@ defmodule DBFS.Crypto do
 
 
   @doc "Calculate a block's hash"
-  def hash(%Block{} = block) do
+  def hash(block) do
     block
     |> payload(@hash_fields)
     |> sha256
   end
 
-  def hash!(%Block{} = block) do
+  def hash!(block) do
     %{ block | hash: hash(block) }
   end
 
 
 
   @doc "Sign block data using a private key"
-  def sign(%Block{} = block, private_key) do
+  def sign(block, private_key) do
     block
     |> payload(@sign_fields)
     |> RsaEx.sign(private_key)
@@ -28,7 +28,7 @@ defmodule DBFS.Crypto do
     |> encode
   end
 
-  def sign!(%Block{} = block, private_key) do
+  def sign!(block, private_key) do
     block
     |> Map.put(:creator,   public_key(private_key))
     |> Map.put(:signature, sign(block, private_key))
@@ -37,7 +37,7 @@ defmodule DBFS.Crypto do
 
 
   @doc "Verify a block using the public key present in it"
-  def verify(%Block{} = block) do
+  def verify(block) do
     sign = decode(block.signature)
     key  = decode(block.creator)
 

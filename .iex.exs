@@ -1,2 +1,2 @@
-alias DBFS.{Block, Blockchain, Crypto}
+alias DBFS.{Repo, Block, Blockchain, Crypto}
 
