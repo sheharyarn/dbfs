@@ -32,13 +32,15 @@ defmodule DBFS.Blockchain.Schema do
 
 
 
-  def get do
-    struct =
-      __MODULE__
-      |> Ecto.Query.last
-      |> Repo.one
+  defoverridable [get: 1]
+  def get(:main) do
+    __MODULE__
+    |> Ecto.Query.last
+    |> Repo.one
+  end
 
-    case struct do
+  def get do
+    case struct = get(:main) do
       %__MODULE__{} -> struct.data
       _             -> nil
     end
@@ -47,6 +49,11 @@ defmodule DBFS.Blockchain.Schema do
 
   def delete do
     Repo.delete_all(__MODULE__)
+  end
+
+  def increment(hash) do
+    chain = get(:main)
+    update(chain, count: chain.data.count + 1, last_hash: hash)
   end
 
 end

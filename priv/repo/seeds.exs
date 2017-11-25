@@ -12,18 +12,14 @@ defmodule Seeds do
   @keypub Crypto.public_key(@keypvt)
 
   def upload_file do
-    block =
-      Block.last
-      |> Block.new(type: :file_create, creator: @keypub, data: %{})
-      |> Ecto.Changeset.apply_changes
-      |> Crypto.sign!(@keypvt)
-      |> Crypto.hash!
-      |> Map.from_struct
-      |> Map.delete(:__meta__)
-
-    %Block{}
-    |> Block.changeset(block)
-    |> Block.insert!
+    Block.last
+    |> Block.new(type: :file_create, creator: @keypub, data: %{})
+    |> Ecto.Changeset.apply_changes
+    |> Crypto.sign!(@keypvt)
+    |> Crypto.hash!
+    |> Map.from_struct
+    |> Map.delete(:__meta__)
+    |> Blockchain.insert
   end
 end
 
