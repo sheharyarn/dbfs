@@ -14,6 +14,7 @@ defmodule DBFS.Block do
   }
 
   @fields_required [:type, :data, :prev, :hash, :creator, :signature, :timestamp]
+  @derive {Poison.Encoder, only: @fields_required}
 
 
   schema "blocks" do
