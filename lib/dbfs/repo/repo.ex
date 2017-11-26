@@ -31,6 +31,7 @@ defmodule DBFS.Repo do
         import  Ecto.Changeset
         require Ecto.Query
 
+        alias Ecto.Query
         alias DBFS.Repo
         alias DBFS.Repo.Enums
       end
