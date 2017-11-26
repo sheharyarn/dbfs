@@ -51,8 +51,21 @@ defmodule DBFS.Blockchain do
   end
 
 
+  def status do
+    case load() do
+      nil ->
+        %{status: :error, message: :doesnt_exist}
 
-  def load() do
+      %Blockchain{count: count} ->
+        %{
+          status: :active,
+          count:  count,
+          recent: Block.paged(nil),
+        }
+    end
+  end
+
+  def load do
     case Blockchain.Schema.get do
       nil ->
         nil
