@@ -1,6 +1,8 @@
 defmodule DBFS.Block do
   use DBFS.Repo.Schema
 
+  import DBFS.Block.Validations
+
   alias DBFS.Crypto
   alias DBFS.Block
   alias DBFS.Blockchain
@@ -13,13 +15,13 @@ defmodule DBFS.Block do
     hash:   Crypto.sha256(Application.get_env(:dbfs, :zero_cookie)),
   }
 
-  @fields_required [:id, :type, :data, :prev, :hash, :creator, :signature, :timestamp]
-  @derive {Poison.Encoder, only: @fields_required}
+  @fields_required [:type, :data, :prev, :hash, :creator, :signature, :timestamp]
+  @derive {Poison.Encoder, only: [:id | @fields_required]}
 
 
   schema "blocks" do
     field :type,      Enums.Block.Type
-    field :data,      :map
+    field :data,      :map, default: %{}
     field :prev,      :string
     field :hash,      :string
     field :creator,   :string
@@ -32,7 +34,8 @@ defmodule DBFS.Block do
     schema
     |> cast(params, @fields_required)
     |> validate_required(@fields_required)
-    |> validate
+    |> validate_data
+    |> validate_crypto
   end
 
 
@@ -93,44 +96,5 @@ defmodule DBFS.Block do
     changeset(%Block{}, params)
   end
 
-
-
-  @doc "Validate a block using previous block's hash"
-  def validate(%Block{prev: prev} = block) do
-    validate(block, prev)
-  end
-
-  def validate(%Block{} = block, %Block{hash: prev_hash}) do
-    validate(block, prev_hash)
-  end
-
-  def validate(%Block{hash: hash, prev: reference} = block, prev_hash) do
-    cond do
-      (reference != prev_hash) ->
-        {:error, :invalid_reference}
-
-      (Crypto.hash(block) != hash) ->
-        {:error, :invalid_hash}
-
-      (Crypto.verify(block) != :ok) ->
-        {:error, :invalid_signature}
-
-      true ->
-        :ok
-    end
-  end
-
-  def validate(%Ecto.Changeset{} = changeset) do
-    prev  = last()
-    block = apply_changes(changeset)
-
-    case validate(block, prev) do
-      :ok ->
-        changeset
-
-      {:error, error} ->
-        add_error(changeset, :crypto, to_string(error))
-    end
-  end
 
 end
