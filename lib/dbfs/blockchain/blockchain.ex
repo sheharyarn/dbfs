@@ -96,6 +96,14 @@ defmodule DBFS.Blockchain do
   end
 
 
+  def valid? do
+    Block.all
+    |> Enum.reverse
+    |> Enum.map(&Block.Validations.validate/1)
+    |> Enum.all?(&(:ok == &1))
+  end
+
+
   @doc "Normalize responses"
   def normalize({:ok, term}),     do: {:ok, term}
   def normalize({:error, error}), do: {:error, {:blockchain, error}}
