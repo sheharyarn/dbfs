@@ -4,6 +4,7 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
 
   @doc "GET: All Blocks"
   def index(conn, params) do
+    render(conn, :index, pager: DBFS.Block.paged(page: params[:page]))
   end
 
 

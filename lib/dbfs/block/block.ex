@@ -13,7 +13,7 @@ defmodule DBFS.Block do
     hash:   Crypto.sha256(Application.get_env(:dbfs, :zero_cookie)),
   }
 
-  @fields_required [:type, :data, :prev, :hash, :creator, :signature, :timestamp]
+  @fields_required [:id, :type, :data, :prev, :hash, :creator, :signature, :timestamp]
   @derive {Poison.Encoder, only: @fields_required}
 
 
