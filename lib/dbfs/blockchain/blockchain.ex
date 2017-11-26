@@ -87,4 +87,21 @@ defmodule DBFS.Blockchain do
   def normalize({:ok, term}),     do: {:ok, term}
   def normalize({:error, error}), do: {:error, {:blockchain, error}}
   def normalize(term),            do: {:error, {:blockchain, term}}
+
+
+
+  # Inspect Protocol Implementation
+  defimpl Inspect, for: __MODULE__ do
+    def inspect(%{count: c, chain: [%{hash: h} | _]}, opts), do: str(c, h)
+    def inspect(%{count: 0, chain: []}, opts),               do: str(0, nil)
+    def inspect(_, opts),                                    do: "#Blockchain<invalid>"
+
+    defp str(count, last) do
+      "#Blockchain<blocks: #{count}, last: #{last}>"
+    end
+  end
+
 end
+
+
+
