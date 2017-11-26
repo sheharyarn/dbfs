@@ -69,14 +69,9 @@ defmodule DBFS.Block.Validations do
 
   @required [:file_hash, :file_name]
   defp validate_data_contents(:file_create, changeset) do
-    keys =
-      changeset
-      |> get_data()
-      |> Map.keys
+    data = get_data(changeset)
 
-    exist? = Enum.all?(@required, &Enum.member?(keys, &1))
-
-    if exist? do
+    if Enum.all?(@required, &!is_nil(data[&1])) do
       changeset
     else
       data_error(changeset, "Missing required fields: #{inspect(@required)}")
