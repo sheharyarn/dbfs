@@ -43,6 +43,13 @@ defmodule DBFS.Block do
   end
 
 
+  defoverridable [all: 0]
+  def all do
+    Block
+    |> Ecto.Query.order_by(desc: :id)
+    |> Repo.all
+  end
+
 
   @doc "Block Zero a.k.a starting point of the blockchain"
   def zero do

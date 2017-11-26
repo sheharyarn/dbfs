@@ -1,4 +1,6 @@
 
+
+
 # Set up Helpers
 # --------------
 
@@ -34,9 +36,9 @@ end
 
 
 # Create 5 File Uploads
-Seeds.upload_file
-Seeds.upload_file
-Seeds.upload_file
-Seeds.upload_file
-Seeds.upload_file
+{:ok, _} = Seeds.upload_file
+{:ok, _} = Seeds.upload_file
+{:ok, _} = Seeds.upload_file
+{:ok, _} = Seeds.upload_file
+{:ok, _} = Seeds.upload_file
 

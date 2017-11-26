@@ -52,7 +52,15 @@ defmodule DBFS.Blockchain do
 
 
 
-  def load(), do: nil
+  def load() do
+    case Blockchain.Schema.get do
+      nil ->
+        nil
+
+      chain ->
+        %Blockchain{ count: chain.count, chain: Block.all }
+    end
+  end
 
   def initialize do
     cond do

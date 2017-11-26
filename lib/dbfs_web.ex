@@ -17,6 +17,7 @@ defmodule DBFS.Web do
   and import those modules here.
   """
 
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: DBFS.Web
@@ -26,6 +27,7 @@ defmodule DBFS.Web do
       import DBFS.Web.Gettext
 
       plug BetterParams
+      plug :put_view, DBFS.Web.view_for(__MODULE__)
     end
   end
 
@@ -74,5 +76,16 @@ defmodule DBFS.Web do
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
   end
+
+
+
+  # Figure out what View to use
+  def view_for(controller) do
+    controller
+    |> Module.split
+    |> List.replace_at(2, "Views")
+    |> Module.concat
+  end
+
 
 end
