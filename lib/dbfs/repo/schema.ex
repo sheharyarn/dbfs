@@ -12,6 +12,7 @@ defmodule DBFS.Repo.Schema do
       alias Ecto.Query
       alias DBFS.Repo
       alias DBFS.Repo.Enums
+      alias DBFS.Repo.Pager
     end
   end
 

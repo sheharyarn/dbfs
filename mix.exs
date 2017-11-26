@@ -48,6 +48,7 @@ defmodule DBFS.Mixfile do
       {:ecto_enum, "~> 1.0"},
       {:ecto_rut, "~> 1.2.2"},
       {:better_params, "~> 0.4.0"},
+      {:scrivener_ecto, "~> 1.0"},
     ]
   end
 

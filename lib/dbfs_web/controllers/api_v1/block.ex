@@ -2,18 +2,38 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
   use DBFS.Web, :controller
 
 
+  @doc "GET: All Blocks"
+  def index(conn, params) do
+  end
+
+
   @doc "GET: Block Status"
   def show(conn, %{hash: hash}) do
+    with {:ok, block} <- get(hash) do
+      render(conn, :show, block: block)
+    end
   end
 
 
   @doc "GET: Block Data"
   def data(conn, %{hash: hash}) do
+    with {:ok, block} <- get(hash) do
+    end
   end
 
 
   @doc "POST: Create a new block"
   def create(conn, %{data: data, block: block}) do
+  end
+
+
+
+
+  defp get(hash) do
+    case DBFS.Block.get(hash) do
+      nil   -> {:error, :not_found}
+      block -> {:ok, block}
+    end
   end
 
 end

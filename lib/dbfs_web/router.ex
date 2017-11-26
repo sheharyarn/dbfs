@@ -21,6 +21,7 @@ defmodule DBFS.Web.Router do
 
       scope "/blocks" do
         post "/",            Block, :create
+        get  "/",            Block, :index
         get  "/:hash",       Block, :show
         get  "/:hash/data",  Block, :data
       end

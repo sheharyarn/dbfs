@@ -35,7 +35,7 @@ defmodule DBFS.Blockchain.Schema do
   defoverridable [get: 1]
   def get(:main) do
     __MODULE__
-    |> Ecto.Query.last
+    |> Query.last
     |> Repo.one
   end
 

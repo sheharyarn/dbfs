@@ -39,16 +39,29 @@ defmodule DBFS.Block do
   @doc "Get last block"
   def last do
     Block
-    |> Ecto.Query.last
+    |> Query.last
     |> Repo.one
   end
 
+  def paged(opts) do
+    Block
+    |> Query.order_by(desc: :id)
+    |> Pager.paginate(opts)
+  end
 
   defoverridable [all: 0]
   def all do
     Block
-    |> Ecto.Query.order_by(desc: :id)
+    |> Query.order_by(desc: :id)
     |> Repo.all
+  end
+
+
+  defoverridable [get: 1]
+  def get(hash) do
+    Block
+    |> Query.where([b], b.hash == ^hash)
+    |> Repo.one
   end
 
 

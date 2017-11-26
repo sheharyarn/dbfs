@@ -35,10 +35,8 @@ end
 {:ok, _} = Blockchain.initialize
 
 
-# Create 5 File Uploads
-{:ok, _} = Seeds.upload_file
-{:ok, _} = Seeds.upload_file
-{:ok, _} = Seeds.upload_file
-{:ok, _} = Seeds.upload_file
-{:ok, _} = Seeds.upload_file
+# Create 50 File Uploads
+Enum.each(1..50, fn _ ->
+  {:ok, _} = Seeds.upload_file
+end)
 

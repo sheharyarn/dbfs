@@ -1,5 +1,6 @@
 defmodule DBFS.Repo do
   use Ecto.Repo, otp_app: :dbfs
+  use Scrivener, page_size: 10
 
   @doc """
   Dynamically loads the repository url from the
@@ -21,21 +22,16 @@ defmodule DBFS.Repo do
   end
 
 
-  # Define Custom Schema Macro
-  defmodule Schema do
-    defmacro __using__(_opts) do
-      quote do
-        use Ecto.Schema
-        use Ecto.Rut, repo: DBFS.Repo
+  # Pager Helpers
+  defmodule Pager do
 
-        import  Ecto.Changeset
-        require Ecto.Query
+    # Fetch pager entries
+    def entries(%Scrivener.Page{entries: entries}), do: entries
+    def entries(term), do: term
 
-        alias Ecto.Query
-        alias DBFS.Repo
-        alias DBFS.Repo.Enums
-      end
-    end
+
+    # Page a query
+    defdelegate paginate(query, opts \\ nil), to: DBFS.Repo
   end
 
 end
