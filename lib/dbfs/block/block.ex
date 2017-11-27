@@ -44,6 +44,7 @@ defmodule DBFS.Block do
     Block
     |> Query.last
     |> Repo.one
+    |> normalize_data
   end
 
   def paged(opts) do
@@ -65,6 +66,7 @@ defmodule DBFS.Block do
     Block
     |> Query.where([b], b.hash == ^hash)
     |> Repo.one
+    |> normalize_data
   end
 
 
@@ -83,6 +85,13 @@ defmodule DBFS.Block do
     |> Crypto.sign!(@zero.pvtkey)
     |> Crypto.hash!
   end
+
+
+  def normalize_data(%{data: data} = block) do
+    %{ block | data: ExUtils.Map.symbolize_keys(data, deep: true) }
+  end
+
+  def normalize_data(term), do: term
 
 
   @doc "Create a new Block from a Blockchain or an existing one"

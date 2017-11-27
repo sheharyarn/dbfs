@@ -20,7 +20,7 @@ defmodule Seeds do
 
   def upload_file do
     Block.last
-    |> Block.new(type: :file_create, creator: @keypub, data: random_file)
+    |> Block.new(type: :file_create, creator: @keypub, data: random_file())
     |> Ecto.Changeset.apply_changes
     |> Crypto.sign!(@keypvt)
     |> Crypto.hash!
