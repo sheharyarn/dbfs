@@ -15,4 +15,8 @@ defmodule DBFS.Web.Views.API.V1.Block do
   end
 
 
+  def render("file.json", %{file: file}) do
+    %{file: file}
+  end
+
 end

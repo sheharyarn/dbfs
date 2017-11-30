@@ -23,7 +23,7 @@ defmodule DBFS.Web.Router do
         post "/",            Block, :create
         get  "/",            Block, :index
         get  "/:hash",       Block, :show
-        get  "/:hash/data",  Block, :data
+        get  "/:hash/file",  Block, :file
       end
 
     end

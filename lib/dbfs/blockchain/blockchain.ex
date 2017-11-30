@@ -1,6 +1,4 @@
 defmodule DBFS.Blockchain do
-  import DBFS.Repo.Multi
-
   alias DBFS.Repo
   alias DBFS.Block
   alias DBFS.Blockchain

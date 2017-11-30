@@ -17,8 +17,9 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
 
 
   @doc "GET: Block Data"
-  def data(conn, %{hash: hash}) do
+  def file(conn, %{hash: hash}) do
     with {:ok, block} <- get(hash) do
+      render(conn, :file, file: DBFS.Block.File.load!(block))
     end
   end
 

@@ -26,8 +26,12 @@ defmodule DBFS.Web do
       import DBFS.Web.Router.Helpers
       import DBFS.Web.Gettext
 
+      alias DBFS.Web.Views.API.V1, as: Views
+
       plug BetterParams
       plug :put_view, DBFS.Web.view_for(__MODULE__)
+
+      action_fallback DBFS.Web.Controllers.API.V1.Fallback
     end
   end
 
