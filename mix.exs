@@ -51,6 +51,7 @@ defmodule DBFS.Mixfile do
       {:better_params, "~> 0.4.0"},
       {:scrivener_ecto, "~> 1.0"},
       {:corsica, "~> 1.0"},
+      {:json, "~> 1.0.2"},
     ]
   end
 

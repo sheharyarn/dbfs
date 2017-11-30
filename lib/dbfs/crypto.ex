@@ -1,5 +1,6 @@
 defmodule DBFS.Crypto do
   alias DBFS.Block
+  alias DBFS.JSON
 
   @sign_fields [:data, :type, :prev, :timestamp]
   @hash_fields [:creator, :signature | @sign_fields]
@@ -9,7 +10,7 @@ defmodule DBFS.Crypto do
   @doc "Calculate a block's hash"
   def hash(block) do
     block
-    |> payload(@hash_fields)
+    |> JSON.encode(@hash_fields)
     |> sha256
   end
 
@@ -22,7 +23,7 @@ defmodule DBFS.Crypto do
   @doc "Sign block data using a private key"
   def sign(block, private_key) do
     block
-    |> payload(@sign_fields)
+    |> JSON.encode(@sign_fields)
     |> RsaEx.sign(private_key)
     |> elem(1)
     |> encode
@@ -43,7 +44,7 @@ defmodule DBFS.Crypto do
 
     {:ok, valid} =
       block
-      |> payload(@sign_fields)
+      |> JSON.encode(@sign_fields)
       |> RsaEx.verify(sign, key)
 
     if valid,
@@ -54,12 +55,6 @@ defmodule DBFS.Crypto do
 
 
   # Helpers
-
-  defp payload(block, fields) do
-    block
-    |> Map.take(fields)
-    |> Poison.encode!
-  end
 
   def sha256(binary) do
     :crypto.hash(:sha256, binary) |> encode
