@@ -19,7 +19,9 @@ end
 
 
 
-# Custom Implementation of Poison.Encoder for Maps
+
+# Poison.Encoder Implementations
+# ------------------------------
 
 defimpl Poison.Encoder, for: Map do
   def encode(map, opts) do
@@ -33,8 +35,17 @@ defimpl Poison.Encoder, for: Map do
     "{" <> encoded <> "}"
   end
 
-
   defp encode_by_key(%{} = map, key, opts) do
     "#{Poison.Encoder.encode(key, opts)}:#{Poison.Encoder.encode(map[key], opts)}"
   end
 end
+
+
+defimpl Poison.Encoder, for: NaiveDateTime do
+  def encode(dt, opts) do
+    {ms, _c} = dt.microsecond
+
+    NaiveDateTime.to_iso8601(%{ dt | microsecond: {ms, 3} }) <> "Z"
+  end
+end
+
