@@ -33,23 +33,7 @@ defmodule DBFS.Blockchain do
   # end
 
 
-  def insert(%{} = block) do
-    Ecto.Multi.new
-    |> run_operation(:insert_block, block)
-    |> run_operation(:update_chain, nil)
-    |> Repo.transaction
-  end
-
-  defp insert_block(_changes, block) do
-    %Block{}
-    |> Block.changeset(block)
-    |> Block.insert
-  end
-
-  defp update_chain(%{insert_block: %{hash: hash}}, nil) do
-    Blockchain.Schema.increment(hash)
-  end
-
+  defdelegate insert(block), to: Blockchain.Schema
 
   def status do
     case load() do

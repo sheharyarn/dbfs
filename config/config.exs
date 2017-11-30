@@ -16,6 +16,7 @@ config :dbfs,
 
 # Crypto Configs
 config :dbfs,
+  data_path: "~/crap/dbfs/files/",
   zero_cookie: "DBFS",
   zero_key: File.read!("priv/keys/zero.pvt")
 

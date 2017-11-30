@@ -1,5 +1,7 @@
 defmodule DBFS.Blockchain.Schema do
   use DBFS.Repo.Schema
+  alias DBFS.Block
+  import DBFS.Repo.Multi
 
 
   @fields_required [:count]
@@ -54,6 +56,28 @@ defmodule DBFS.Blockchain.Schema do
   def increment(hash) do
     chain = get(:main)
     update(chain, count: chain.data.count + 1, last_hash: hash)
+  end
+
+
+
+
+
+  defoverridable [insert: 1]
+  def insert(%{} = block) do
+    Ecto.Multi.new
+    |> run_operation(:block, block)
+    |> run_operation(:chain, nil)
+    |> Repo.transaction
+  end
+
+  defp block(_changes, block) do
+    %Block{}
+    |> Block.changeset(block)
+    |> Block.insert
+  end
+
+  defp chain(%{block: %{hash: hash}}, nil) do
+    increment(hash)
   end
 
 end
