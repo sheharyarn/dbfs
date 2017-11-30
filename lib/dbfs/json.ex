@@ -4,9 +4,6 @@ defmodule DBFS.JSON do
   it needs to be in a very specific way
   """
 
-  @safe_structs [NaiveDateTime]
-  @blocked_keys [:__struct__, :__meta__]
-
 
   def encode(%{} = map, fields) do
     map
@@ -14,32 +11,30 @@ defmodule DBFS.JSON do
     |> encode
   end
 
-  def encode(%{} = map) do
-    map
-    |> to_keyword
-    |> encode
-  end
-
   def encode(term) do
-    JSON.encode!(term)
+    Poison.encode!(term)
+  end
+
+end
+
+
+
+# Custom Implementation of Poison.Encoder for Maps
+
+defimpl Poison.Encoder, for: Map do
+  def encode(map, opts) do
+    encoded =
+      map
+      |> Map.keys
+      |> Enum.sort
+      |> Enum.map(&encode_by_key(map, &1, opts))
+      |> Enum.join(",")
+
+    "{" <> encoded <> "}"
   end
 
 
-
-  # Helpers
-
-  def to_keyword(%{__struct__: struct} = map) when struct in @safe_structs do
-    to_string(map)
+  defp encode_by_key(%{} = map, key, opts) do
+    "#{Poison.Encoder.encode(key, opts)}:#{Poison.Encoder.encode(map[key], opts)}"
   end
-
-  def to_keyword(%{} = map) do
-    map
-    |> Map.delete(@blocked_keys)
-    |> Map.keys
-    |> Enum.sort
-    |> Enum.reduce([], &Keyword.put( &2, &1, to_keyword(map[&1]) ))
-    |> Enum.reverse
-  end
-
-  def to_keyword(term), do: term
 end
