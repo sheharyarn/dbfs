@@ -38,6 +38,7 @@ defmodule DBFS.Web.Endpoint do
     key: "_dbfs_key",
     signing_salt: "rq2FqqfY"
 
+  plug Corsica, origins: "*"
   plug DBFS.Web.Router
 
   @doc """

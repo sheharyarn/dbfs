@@ -50,6 +50,7 @@ defmodule DBFS.Mixfile do
       {:ex_utils, "~> 0.1.7"},
       {:better_params, "~> 0.4.0"},
       {:scrivener_ecto, "~> 1.0"},
+      {:corsica, "~> 1.0"},
     ]
   end
 
