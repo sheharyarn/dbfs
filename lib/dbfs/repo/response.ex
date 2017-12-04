@@ -5,10 +5,10 @@ defmodule DBFS.Repo.Response do
   """
 
 
-  defp normalize(:ok),            do: {:ok, :success}
-  defp normalize({:ok, resp}),    do: {:ok, resp}
+  def normalize(:ok),            do: {:ok, :success}
+  def normalize({:ok, resp}),    do: {:ok, resp}
 
-  defp normalize(:error),         do: {:error, :unknown}
-  defp normalize({:error, resp}), do: {:error, resp}
-  defp normalize(term),           do: {:error, term}
+  def normalize(:error),         do: {:error, :unknown}
+  def normalize({:error, resp}), do: {:error, resp}
+  def normalize(term),           do: {:error, term}
 end

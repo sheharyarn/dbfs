@@ -1,6 +1,7 @@
 defmodule DBFS.Blockchain.File do
   import DBFS.Repo.Multi
 
+  alias DBFS.Repo
   alias DBFS.Block
   alias DBFS.Blockchain
 
@@ -23,7 +24,7 @@ defmodule DBFS.Blockchain.File do
   defp block(_changes, block) do
     block
     |> Blockchain.Schema.insert
-    |> Repo.Multi.normalize
+    |> Repo.Multi.normalize(with: :block)
   end
 
   # Decode Encoded File

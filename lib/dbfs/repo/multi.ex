@@ -25,4 +25,8 @@ defmodule DBFS.Repo.Multi do
   def normalize({:ok, result}),         do: {:ok, result}
   def normalize({:error, value}),       do: {:error, value}
   def normalize({:error, _, value, _}), do: {:error, value}
+
+  def normalize({:ok, transaction}, with: key), do: {:ok, transaction[key]}
+  def normalize(error, _opts), do: normalize(error)
+
 end

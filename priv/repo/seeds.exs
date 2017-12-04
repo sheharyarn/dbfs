@@ -20,32 +20,29 @@ defmodule Seeds do
 
   def upload_file do
     file = random_file()
+    file_encrypted = File.read!(file)
+    file_encoded = Block.File.encode(file_encrypted)
+    file_data = %{
+      file_name: Path.basename(file),
+      file_hash: Crypto.sha256(file_encrypted)
+    }
 
-    {:ok, %{block: block}} =
+    block =
       Block.last
-      |> Block.new(type: :file_create, creator: @keypub, data: file_data(file))
+      |> Block.new(type: :file_create, creator: @keypub, data: file_data)
       |> Ecto.Changeset.apply_changes
       |> Crypto.sign!(@keypvt)
       |> Crypto.hash!
-      |> Map.from_struct
-      |> Map.delete(:__meta__)
-      |> Blockchain.insert
+      |> Poison.encode!
+      |> Poison.decode!
+      |> ExUtils.Map.symbolize_keys(deep: true)
 
-    contents = Block.File.read(file)
-    Block.File.save!(block, contents)
-    {:ok, block}
+    {:ok, transaction} = Blockchain.insert_with_file(block, file_encoded)
   end
 
 
   defp random_file do
     Path.join(@fixture_path, Enum.random(@fixture_files))
-  end
-
-  defp file_data(file) do
-    %{
-      file_name: Path.basename(file),
-      file_hash: Crypto.sha256(File.read!(file))
-    }
   end
 end
 

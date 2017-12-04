@@ -31,7 +31,9 @@ defmodule DBFS.Blockchain do
   # end
 
 
-  defdelegate insert(block), to: Blockchain.Schema
+  defdelegate insert(block),                 to: Blockchain.Schema
+  defdelegate insert_with_file(block, file), to: Blockchain.File,   as: :insert
+
 
   def status do
     case load() do
