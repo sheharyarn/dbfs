@@ -7,19 +7,46 @@ defmodule DBFS.Web.Controllers.API.V1.Fallback do
   def call(conn, {:error, error}) when error in @basic_errors do
     conn
     |> put_status(error)
-    |> error(error)
+    |> render_error(error)
   end
 
 
+  def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
+    errors = normalize_changeset_errors(changeset)
+    call(conn, errors)
+  end
 
-  def call(conn, _) do
+
+  def call(conn, {:error, _op, error, _changes}) do
+    call(conn, {:error, error})
+  end
+
+  def call(conn, {:error, error}) do
     conn
     |> put_status(:unprocessable_entity)
-    |> error(:unknown_error)
+    |> render_error(error)
+  end
+
+  def call(conn, _) do
+    call(conn, {:error, :unknown_error})
   end
 
 
-  defp error(conn, error) do
-    render(conn, Views.Fallback, :error, error: error)
+
+  # Private
+
+  def normalize_changeset_errors(changeset) do
+    Enum.map(changeset.errors, fn {type, {message, _details}} ->
+      "#{type} #{message}"
+    end)
   end
+
+  defp render_error(conn, errors) when is_list(errors) do
+    render(conn, Views.Fallback, :error, errors: errors)
+  end
+
+  defp render_error(conn, error) do
+    render_error(conn, [error])
+  end
+
 end
