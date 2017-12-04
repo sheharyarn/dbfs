@@ -26,6 +26,7 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
 
   @doc "POST: Create a new block"
   def create(conn, %{data: data, block: block}) do
+    DBFS.Blockchain.File.insert(block, data)
   end
 
 

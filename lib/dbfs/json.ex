@@ -45,7 +45,10 @@ defimpl Poison.Encoder, for: NaiveDateTime do
   def encode(dt, opts) do
     {ms, _c} = dt.microsecond
 
-    NaiveDateTime.to_iso8601(%{ dt | microsecond: {ms, 3} }) <> "Z"
+    %{ dt | microsecond: {ms, 3} }
+    |> NaiveDateTime.to_iso8601()
+    |> Kernel.<>("Z")
+    |> Poison.Encoder.BitString.encode(opts)
   end
 end
 
