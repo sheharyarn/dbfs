@@ -1,5 +1,6 @@
 defmodule DBFS.Web.Controllers.API.V1.Fallback do
   use DBFS.Web, :controller
+  require Logger
 
 
   @basic_errors [:not_found, :unprocessable_entity, :forbidden]
@@ -13,7 +14,7 @@ defmodule DBFS.Web.Controllers.API.V1.Fallback do
 
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     errors = normalize_changeset_errors(changeset)
-    call(conn, errors)
+    call(conn, {:error, errors})
   end
 
 
@@ -27,7 +28,10 @@ defmodule DBFS.Web.Controllers.API.V1.Fallback do
     |> render_error(error)
   end
 
-  def call(conn, _) do
+  def call(conn, term) do
+    Logger.error("Unknown Value Recieved:")
+    Logger.error(inspect(term))
+
     call(conn, {:error, :unknown_error})
   end
 
