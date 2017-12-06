@@ -14,7 +14,7 @@ defmodule DBFS.Blockchain.File do
     Ecto.Multi.new
     |> run_operation(:block, block)
     |> run_operation(:file, encoded_file)
-    |> run_operation(:match_hash, nil)
+    |> run_operation(:match_hash, encoded_file)
     |> run_operation(:file_save, nil)
     |> Repo.transaction
   end
@@ -36,8 +36,8 @@ defmodule DBFS.Blockchain.File do
   end
 
   # Compare Block / File hashes
-  defp match_hash(%{file: file, block: block}, nil) do
-    file_hash  = Block.File.hash(file)
+  defp match_hash(%{block: block}, encoded_file) do
+    file_hash  = Block.File.hash(encoded_file)
     block_hash = block.data.file_hash
 
     case file_hash == block_hash do
