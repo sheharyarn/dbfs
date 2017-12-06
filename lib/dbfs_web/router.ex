@@ -17,7 +17,8 @@ defmodule DBFS.Web.Router do
       pipe_through :api
 
 
-      get "/", Main, :index
+      get "/",      Main, :index
+      get "/nodes", Main, :nodes
 
       scope "/blocks" do
         post "/",            Block, :create

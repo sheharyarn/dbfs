@@ -5,10 +5,18 @@ defmodule DBFS.Web.Controllers.API.V1.Main do
   @doc "GET: Application Status"
   def index(conn, _params) do
     status = DBFS.Blockchain.status
+    nodes  = DBFS.Node.list
 
     conn
     |> determine_code(status)
-    |> render(:index, status: status)
+    |> render(:index, status: status, nodes: nodes)
+  end
+
+
+
+  @doc "GET: Node Status"
+  def nodes(conn, _params) do
+    render(conn, :nodes, nodes: DBFS.Node.list)
   end
 
 
