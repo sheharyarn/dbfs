@@ -28,6 +28,6 @@ npm-debug.log
 
 
 # Secret Keys
-/priv/keys/*.pub
-/priv/keys/*.pvt
+#/priv/keys/*.pub
+#/priv/keys/*.pvt
 

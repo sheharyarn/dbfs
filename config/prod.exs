@@ -61,4 +61,16 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+#
+
+config :dbfs, DBFS.Web.Endpoint,
+  secret_key_base: "MUCxNIWuEjH6FeU02OW3B4c06DP6lSsT/AUpQGSnUIMRMyU86X7wLNVHZTBeXeHt"
+
+config :dbfs, DBFS.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  username: System.get_env("POSTGRES_USER"),
+  password: System.get_env("POSTGRES_PASS"),
+  database: "dbfs_prod",
+  hostname: "localhost",
+  pool_size: 15
+

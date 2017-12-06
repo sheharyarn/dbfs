@@ -51,6 +51,8 @@ defmodule DBFS.Mixfile do
       {:better_params, "~> 0.4.0"},
       {:scrivener_ecto, "~> 1.0"},
       {:corsica, "~> 1.0"},
+      {:distillery, "~> 1.5"},
+      {:bootleg, "~> 0.6"},
     ]
   end
 
