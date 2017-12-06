@@ -47,6 +47,17 @@ defmodule DBFS.Block do
     |> normalize_data
   end
 
+
+  @doc "Get the next block"
+  def next(hash) do
+    if prev = get(hash) do
+      Block
+      |> Repo.get(prev.id + 1)
+      |> normalize_data
+    end
+  end
+
+
   def paged(opts) do
     Block
     |> Query.order_by(desc: :id)

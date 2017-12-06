@@ -18,7 +18,8 @@ config :dbfs,
 config :dbfs,
   data_path: "~/crap/dbfs/files/",
   zero_cookie: "DBFS",
-  zero_key: File.read!("priv/keys/zero.pvt")
+  zero_key: File.read!("priv/keys/zero.pvt"),
+  master_node: :nonode@nohost
 
 
 # Configures the endpoint

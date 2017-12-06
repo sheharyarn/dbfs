@@ -35,17 +35,24 @@ defmodule DBFS.Blockchain do
   defdelegate insert_with_file(block, file), to: Blockchain.File,   as: :insert
 
 
-  def status do
-    case load() do
+  def status(:core) do
+    case Blockchain.Schema.get do
       nil ->
         %{status: :error, message: :doesnt_exist}
 
-      %Blockchain{count: count} ->
-        %{
-          status: :active,
-          count:  count,
-          recent: Block.paged(nil),
-        }
+      %{} = schema ->
+        schema
+        |> Map.from_struct
+        |> Map.merge(%{status: :active})
+    end
+  end
+
+  def status do
+    case status(:core) do
+      %{} = schema ->
+        Map.merge(schema, %{recent: Block.paged(nil)})
+
+      term -> term
     end
   end
 
@@ -97,9 +104,9 @@ defmodule DBFS.Blockchain do
 
   # Inspect Protocol Implementation
   defimpl Inspect, for: __MODULE__ do
-    def inspect(%{count: c, chain: [%{hash: h} | _]}, opts), do: str(c, h)
-    def inspect(%{count: 0, chain: []}, opts),               do: str(0, nil)
-    def inspect(_, opts),                                    do: "#Blockchain<invalid>"
+    def inspect(%{count: c, chain: [%{hash: h} | _]}, _opts), do: str(c, h)
+    def inspect(%{count: 0, chain: []}, _opts),               do: str(0, nil)
+    def inspect(_blockchain, _opts),                          do: "#Blockchain<invalid>"
 
     defp str(count, last) do
       "#Blockchain<blocks: #{count}, last: #{last}>"
