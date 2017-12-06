@@ -24,7 +24,7 @@ defmodule Seeds do
     file_encoded = Block.File.encode(file_encrypted)
     file_data = %{
       file_name: Path.basename(file),
-      file_hash: Crypto.sha256(file_encrypted)
+      file_hash: Crypto.sha256(file_encoded)
     }
 
     block =
