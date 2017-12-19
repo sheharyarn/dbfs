@@ -16,7 +16,10 @@ defmodule DBFS.Web.Controllers.API.V1.Main do
 
   @doc "GET: Node Status"
   def nodes(conn, _params) do
-    render(conn, :nodes, nodes: DBFS.Node.cluster_status)
+    nodes = DBFS.Node.cluster_status
+    count = DBFS.Blockchain.status.count
+
+    render(conn, :nodes, nodes: nodes, block_count: count)
   end
 
 

@@ -7,7 +7,7 @@ defmodule DBFS.Web.Views.API.V1.Main do
   end
 
 
-  def render("nodes.json", %{nodes: nodes}) do
-    %{nodes: nodes}
+  def render("nodes.json", %{nodes: nodes, block_count: count}) do
+    %{nodes: nodes, block_count: count}
   end
 end
