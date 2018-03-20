@@ -1,6 +1,20 @@
 defmodule DBFS.Consensus.Election do
   alias DBFS.Consensus
 
+  def start do
+    %{state: state} = get()
+
+    cond do
+      state == :electing ->
+        {:error, :already_electing}
+
+      true ->
+        choose_leader!()
+        :ok
+    end
+  end
+
+
   def get do
     Consensus.Global.get
   end
