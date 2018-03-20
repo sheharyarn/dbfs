@@ -27,6 +27,28 @@ defmodule DBFS.Consensus.Global do
   defdelegate set(data), to: Global.DB.Status
 
 
+  def setup do
+    list  = Node.list
+    nodes = [node() | list]
+
+    last_leader =
+      if old = List.first(list) do
+        :rpc.call(old, Global, :get, [])
+      else
+        default()
+      end
+
+    :rpc.multicall(nodes, Amnesia, :stop, [])
+    Amnesia.Schema.destroy(nodes)
+    Amnesia.Schema.create(nodes)
+    :rpc.multicall(nodes, Amnesia, :start, [])
+
+    Global.DB.Status.create
+    Global.DB.wait(15000)
+    Global.set(last_leader)
+  end
+
+
   def default do
     %{state: nil, leader: nil}
   end
