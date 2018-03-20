@@ -53,6 +53,7 @@ defmodule DBFS.Mixfile do
       {:corsica, "~> 1.0"},
       {:distillery, "~> 1.5"},
       {:bootleg, "~> 0.6"},
+      {:amnesia, "~> 0.2.7"},
     ]
   end
 
@@ -64,7 +65,8 @@ defmodule DBFS.Mixfile do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.seed":  ["run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "ecto.seed"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       "test": ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
