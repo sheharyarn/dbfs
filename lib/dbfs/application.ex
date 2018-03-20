@@ -14,13 +14,15 @@ defmodule DBFS.Application do
       supervisor(DBFS.Web.Endpoint, []),
       # Start your own worker by calling: DBFS.Worker.start_link(arg1, arg2, arg3)
       # worker(DBFS.Worker, [arg1, arg2, arg3]),
-      worker(DBFS.Blockchain.Server, []),
+      worker(DBFS.Consensus.Status, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: DBFS.Supervisor]
-    Supervisor.start_link(children, opts)
+    resp = Supervisor.start_link(children, opts)
+
+    resp
   end
 
   # Tell Phoenix to update the endpoint configuration
