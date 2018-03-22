@@ -32,8 +32,13 @@ defmodule DBFS.Consensus.Cluster do
 
 
   defp sync_next(node, hash) do
-    %{block: block, file: file} = :rpc.call(node, Block.File, :next, [hash])
-    Blockchain.insert(Map.from_struct(block), file)
+    try do
+      %{block: block, file: file} = :rpc.call(node, Block.File, :next, [hash])
+      Blockchain.insert(Map.from_struct(block), file)
+    rescue
+      Ecto.ConstraintError ->
+        sync_next(node,hash)
+    end
   end
 
 
