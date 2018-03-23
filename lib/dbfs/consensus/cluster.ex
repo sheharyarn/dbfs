@@ -5,6 +5,8 @@ defmodule DBFS.Consensus.Cluster do
 
   require Logger
 
+
+
   @doc "Synchronize with the network"
   def sync do
     leader = Consensus.Election.ensure_leader!
@@ -20,6 +22,11 @@ defmodule DBFS.Consensus.Cluster do
     current = Consensus.Node.status
 
     cond do
+      current.count == 0 ->
+        Logger.debug("#{node()} - Count = 0")
+        sync_zero(leader.name)
+        update_until_synced(leader)
+
       current.count < leader.count ->
         Logger.debug("#{node()} - Count Less than Leader")
         sync_next(leader.name, current.last_hash)
@@ -31,6 +38,16 @@ defmodule DBFS.Consensus.Cluster do
     end
   end
 
+
+  defp sync_zero(node) do
+    zero =
+      :rpc.call(node, Block, :first, [])
+      |> Block.changeset
+      |> Ecto.Changeset.apply_changes
+      |> DBFS.Repo.insert!
+
+    Blockchain.Schema.increment(zero.hash)
+  end
 
   defp sync_next(node, hash) do
     try do
