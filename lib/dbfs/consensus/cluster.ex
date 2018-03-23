@@ -16,6 +16,7 @@ defmodule DBFS.Consensus.Cluster do
   end
 
   defp update_until_synced(leader) do
+    Process.sleep 1000
     current = Consensus.Node.status
 
     cond do
