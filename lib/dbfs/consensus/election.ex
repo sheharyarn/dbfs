@@ -15,6 +15,22 @@ defmodule DBFS.Consensus.Election do
   end
 
 
+  def ensure_leader! do
+    current = get()
+
+    if (current.state == :elected) and Consensus.Node.connected?(current.leader) do
+      if (Consensus.Node.status.count > Consensus.Node.status(current.leader).count) do
+        start()
+      end
+
+      get!()
+    else
+      start()
+      get!()
+    end
+  end
+
+
   def get do
     Consensus.Global.get
   end
