@@ -31,3 +31,6 @@ npm-debug.log
 #/priv/keys/*.pub
 #/priv/keys/*.pvt
 
+
+# Mnesia Folders
+/Mnesia.*/
