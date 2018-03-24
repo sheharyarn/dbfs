@@ -75,8 +75,10 @@ defmodule DBFS.Block.Validations do
 
 
   @required [:file_hash, :file_name]
+  @optional [:file_type, :file_size, :file_key]
   defp validate_data_contents(:file_create, changeset) do
     data = get_data(changeset)
+    _zzz = Map.take(data, @optional)
 
     if Enum.all?(@required, &!is_nil(data[&1])) do
       changeset
