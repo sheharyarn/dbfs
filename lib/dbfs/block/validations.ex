@@ -1,5 +1,6 @@
 defmodule DBFS.Block.Validations do
   import Ecto.Changeset
+  require Logger
 
   alias DBFS.Block
   alias DBFS.Crypto
@@ -19,7 +20,12 @@ defmodule DBFS.Block.Validations do
       (reference != prev_hash) ->
         {:error, :invalid_reference}
 
-      (Crypto.hash(block) != hash) ->
+      ((calculated = Crypto.hash(block)) != hash) ->
+        Logger.error("Hashes don't match")
+        Logger.error("Passed:     "  <> inspect(hash))
+        Logger.error("Calculated: "  <> inspect(calculated))
+        Logger.error("Full Block:\n" <> inspect(block))
+
         {:error, :invalid_hash}
 
       (Crypto.verify(block) != :ok) ->
@@ -66,6 +72,7 @@ defmodule DBFS.Block.Validations do
       _ -> data_error(changeset, "Zero Block's data should be empty")
     end
   end
+
 
   @required [:file_hash, :file_name]
   defp validate_data_contents(:file_create, changeset) do
