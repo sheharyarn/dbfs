@@ -39,6 +39,16 @@ defmodule DBFS.Block do
   end
 
 
+
+  @doc "Get first block"
+  def first do
+    Block
+    |> Query.first
+    |> Repo.one
+    |> normalize_data
+  end
+
+
   @doc "Get last block"
   def last do
     Block
