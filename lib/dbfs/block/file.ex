@@ -12,23 +12,39 @@ defmodule DBFS.Block.File do
 
 
   def save(%{hash: hash} = _block, binary) do
-    File.mkdir_p!(@path)
+    mkdir!
 
-    @path
-    |> Path.join(hash)
+    hash
+    |> full_path
     |> File.write(binary)
     |> Response.normalize
   end
 
 
   def load!(%{hash: hash}) do
-    @path
-    |> Path.join(hash)
+    hash
+    |> full_path
     |> read
   end
 
   def read(path) do
     path |> File.read! |> encode
+  end
+
+
+
+  defp mkdir! do
+    "test"
+    |> full_path
+    |> File.mkdir_p!
+  end
+
+  defp full_path(suffix) do
+    Path.join([
+      @path,
+      System.get_env("NODE") || "default",
+      suffix,
+    ])
   end
 
 end
