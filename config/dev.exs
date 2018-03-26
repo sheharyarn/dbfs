@@ -53,6 +53,6 @@ config :dbfs, DBFS.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
-  database: "dbfs_dev",
+  database: "dbfs_#{System.get_env("NODE") || "dev"}",
   hostname: "localhost",
   pool_size: 10
