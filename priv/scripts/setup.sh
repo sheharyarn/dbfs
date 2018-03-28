@@ -6,8 +6,8 @@ set -o errtrace
 set -o errexit
 
 
-NODE=newyork   mix do ecto.drop, ecto.create, ecto.migrate, ecto.seed
-NODE=london    mix do ecto.drop, ecto.create, ecto.migrate, ecto.seed
-NODE=singapore mix do ecto.drop, ecto.create, ecto.migrate, ecto.seed
+NODE=newyork   PRIMARY=1 mix do ecto.drop, ecto.create, ecto.migrate, ecto.seed
+NODE=london    PRIMARY=0 mix do ecto.drop, ecto.create, ecto.migrate, ecto.seed
+NODE=singapore PRIMARY=0 mix do ecto.drop, ecto.create, ecto.migrate, ecto.seed
 
 
