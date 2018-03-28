@@ -37,7 +37,7 @@ defmodule Seeds do
       |> Poison.decode!
       |> ExUtils.Map.symbolize_keys(deep: true)
 
-    {:ok, transaction} = Blockchain.insert_with_file(block, file_encoded)
+    {:ok, transaction} = Blockchain.insert(block, file_encoded)
   end
 
 
@@ -52,12 +52,17 @@ end
 # Actual Seeds
 # ------------
 
-# Initialize Blockchain
-{:ok, _} = Blockchain.initialize
 
+# For primary node
+if System.get_env("PRIMARY") == "1" do
+  # Initialize Blockchain
+  {:ok, _} = Blockchain.initialize
 
-# Create 50 File Uploads
-Enum.each(1..50, fn _ ->
-  {:ok, _} = Seeds.upload_file
-end)
+  Enum.each(1..50, fn _ ->
+    {:ok, _} = Seeds.upload_file
+  end)
+
+else
+  Blockchain.Schema.insert!(count: 0, last_hash: nil)
+end
 
