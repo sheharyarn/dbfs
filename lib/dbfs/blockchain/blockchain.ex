@@ -2,6 +2,7 @@ defmodule DBFS.Blockchain do
   alias DBFS.Repo
   alias DBFS.Block
   alias DBFS.Blockchain
+  alias DBFS.Consensus
 
   @moduledoc """
   A naive Blockchain data structure implemented on top
@@ -32,7 +33,30 @@ defmodule DBFS.Blockchain do
 
 
   defdelegate insert(block),                 to: Blockchain.Schema
-  defdelegate insert_with_file(block, file), to: Blockchain.File,   as: :insert
+  defdelegate insert(block, file),           to: Blockchain.File
+
+
+  def insert_sync(block) do
+    block
+    |> insert
+    |> broadcast_on_success
+  end
+
+  def insert_sync(block, file) do
+    block
+    |> insert(file)
+    |> broadcast_on_success
+  end
+
+  defp broadcast_on_success(transaction) do
+    case transaction do
+      {:ok, _} -> Consensus.sync_all
+      _        -> :ok
+    end
+
+    transaction
+  end
+
 
 
   def status(:core) do
