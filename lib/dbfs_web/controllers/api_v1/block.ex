@@ -26,7 +26,7 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
 
   @doc "POST: Create a new block"
   def create(conn, %{data: data, block: block}) do
-    transaction = DBFS.Blockchain.File.insert(block, data)
+    transaction = DBFS.Blockchain.insert_sync(block, data)
 
     with {:ok, %{block: block}} <- transaction do
       render(conn, :show, block: block)
