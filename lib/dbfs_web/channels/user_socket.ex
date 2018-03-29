@@ -3,6 +3,7 @@ defmodule DBFS.Web.UserSocket do
 
   ## Channels
   # channel "room:*", DBFS.Web.RoomChannel
+  channel "status", DBFS.Web.Channels.Status
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
