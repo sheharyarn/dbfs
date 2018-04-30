@@ -19,6 +19,11 @@ defmodule DBFS.Repo do
       zero:        0,
       file_create: 1,
       file_delete: 2
+
+
+    def keys(enum) do
+      Keyword.keys(enum.__enum_map__())
+    end
   end
 
 
