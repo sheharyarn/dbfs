@@ -58,9 +58,12 @@ if System.get_env("PRIMARY") == "1" do
   # Initialize Blockchain
   {:ok, _} = Blockchain.initialize
 
-  Enum.each(1..50, fn _ ->
-    {:ok, _} = Seeds.upload_file
-  end)
+
+  if System.get_env("SEED_BLOCKS") == "1" do
+    Enum.each(1..50, fn _ ->
+      {:ok, _} = Seeds.upload_file
+    end)
+  end
 
 else
   Blockchain.Schema.insert!(count: 0, last_hash: nil)
