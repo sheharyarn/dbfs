@@ -34,13 +34,18 @@ defmodule DBFS.Block.File do
 
 
   def next(hash) do
-    block = DBFS.Block.next(hash)
-    file  = load!(block)
-
     # TODO:
-    # Make sure that the block type is file_create
+    # Also check and load the file if it exists
 
-    %{block: block, file: file}
+    block = DBFS.Block.next(hash)
+
+    case block.type do
+      :file_create ->
+        %{ block: block, file: load!(block) }
+
+      _ ->
+        %{ block: block, file: nil}
+    end
   end
 
 
