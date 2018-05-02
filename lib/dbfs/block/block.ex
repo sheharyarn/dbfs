@@ -62,7 +62,9 @@ defmodule DBFS.Block do
   def next(hash) do
     if prev = get(hash) do
       Block
-      |> Repo.get(prev.id + 1)
+      |> Query.where([b], b.id > ^prev.id)
+      |> Query.first
+      |> Repo.one
       |> normalize_data
     end
   end
