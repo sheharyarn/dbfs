@@ -161,4 +161,11 @@ defmodule DBFS.Block do
   end
 
 
+  @doc "Returns the number of file blocks - delete blocks"
+  def file_count do
+    counts = block_counts()
+
+    counts[:file_create] - counts[:file_delete]
+  end
+
 end
