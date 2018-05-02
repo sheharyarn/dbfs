@@ -15,6 +15,7 @@ defmodule DBFS.Block do
     hash:   Crypto.sha256(Application.get_env(:dbfs, :zero_cookie)),
   }
 
+  @allowed_types Enums.keys(Enums.Block.Type)
   @fields_required [:type, :data, :prev, :hash, :creator, :signature, :timestamp]
   @derive {Poison.Encoder, only: [:id | @fields_required]}
 
@@ -143,5 +144,21 @@ defmodule DBFS.Block do
   end
 
   def is_deleted?(_block), do: false
+
+
+
+  @doc "Returns the number of each block type"
+  def block_counts do
+    counts =
+      Block
+      |> Query.group_by([b], b.type)
+      |> Query.select([b], {b.type, count(b.id)})
+      |> Repo.all
+
+    Enum.map(@allowed_types, fn type ->
+      { type, counts[type] || 0 }
+    end)
+  end
+
 
 end
