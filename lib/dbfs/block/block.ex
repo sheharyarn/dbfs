@@ -129,4 +129,19 @@ defmodule DBFS.Block do
   end
 
 
+
+  @doc "Check if the block file was deleted in a future block"
+  def is_deleted?(%Block{type: :file_create, hash: hash, creator: creator}) do
+    hash_map = %{parent_hash: hash}
+
+    Block
+    |> Query.where([b], b.type == ^:file_delete)
+    |> Query.where([b], b.creator == ^creator)
+    |> Query.where([b], fragment("? @> ?", b.data, ^hash_map))
+    |> Repo.aggregate(:count, :id)
+    |> Kernel.>(0)
+  end
+
+  def is_deleted?(_block), do: false
+
 end
