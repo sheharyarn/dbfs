@@ -57,33 +57,46 @@ defmodule DBFS.Block.Validations do
 
 
 
+  @data_fields %{
+    file_create: %{
+      required: [:file_hash, :file_name],
+      optional: [:file_type, :file_size, :file_key],
+    },
+
+    file_delete: %{
+      required: [:parent_hash],
+      optional: [],
+    },
+  }
 
   def validate_data(changeset) do
     case get_field(changeset, :type) do
-      :zero        -> validate_data_contents(:zero, changeset)
-      :file_create -> validate_data_contents(:file_create, changeset)
+      :zero        -> validate_zero_contents(changeset)
+      :file_create -> validate_data_contents(changeset, @data_fields.file_create)
+      :file_delete -> validate_data_contents(changeset, @data_fields.file_delete)
       _            -> data_error(changeset, "Invalid Type")
     end
   end
 
-  defp validate_data_contents(:zero, changeset) do
+  defp validate_zero_contents(changeset) do
     case Enum.count(get_data(changeset)) do
       0 -> changeset
       _ -> data_error(changeset, "Zero Block's data should be empty")
     end
   end
 
+  defp validate_data_contents(changeset, %{required: r, optional: o}) do
+    validate_data_contents(changeset, r, o)
+  end
 
-  @required [:file_hash, :file_name]
-  @optional [:file_type, :file_size, :file_key]
-  defp validate_data_contents(:file_create, changeset) do
+  defp validate_data_contents(changeset, required, optional) do
     data = get_data(changeset)
-    _zzz = Map.take(data, @optional)
+    _zzz = Map.take(data, optional)
 
-    if Enum.all?(@required, &!is_nil(data[&1])) do
+    if Enum.all?(required, &!is_nil(data[&1])) do
       changeset
     else
-      data_error(changeset, "Missing required fields: #{inspect(@required)}")
+      data_error(changeset, "Missing required fields: #{inspect(required)}")
     end
   end
 
