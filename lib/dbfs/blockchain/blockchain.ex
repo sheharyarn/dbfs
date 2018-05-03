@@ -68,6 +68,7 @@ defmodule DBFS.Blockchain do
         schema
         |> Map.from_struct
         |> Map.merge(%{status: :active})
+        |> with_counts
     end
   end
 
@@ -79,6 +80,11 @@ defmodule DBFS.Blockchain do
       term -> term
     end
   end
+
+  defp with_counts(%{} = map) do
+    %{ map | count: %{ all: map.count, files: Block.file_count } }
+  end
+
 
   def load do
     case Blockchain.Schema.get do
