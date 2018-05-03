@@ -51,11 +51,27 @@ defmodule DBFS.Consensus.Cluster do
 
   defp sync_next(node, hash) do
     try do
-      %{block: block, file: file} = :rpc.call(node, Block.File, :next, [hash])
-      Blockchain.insert(Map.from_struct(block), file)
+      rpc_sync_block(node, hash)
     rescue
       Ecto.ConstraintError ->
         sync_next(node,hash)
+    end
+  end
+
+
+  defp rpc_sync_block(node, hash) do
+    %{block: block, file: file} = :rpc.call(node, Block.File, :next, [hash])
+    block = Map.from_struct(block)
+
+    cond do
+      is_nil(file) ->
+        Blockchain.insert(block)
+
+      is_binary(file) ->
+        Blockchain.insert(block, file)
+
+      true ->
+        raise "Invalid File Data"
     end
   end
 
