@@ -17,7 +17,7 @@ defmodule DBFS.Block do
 
   @allowed_types Enums.keys(Enums.Block.Type)
   @fields_required [:type, :data, :prev, :hash, :creator, :signature, :timestamp]
-  @derive {Poison.Encoder, only: [:id | @fields_required]}
+  @derive {Poison.Encoder, only: [:id, :meta | @fields_required]}
 
 
   schema "blocks" do
