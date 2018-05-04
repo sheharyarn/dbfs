@@ -25,19 +25,15 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
 
 
 
-  @doc "POST: Create a new block"
-  def create(conn, %{block: block}) do
-    transaction = DBFS.Blockchain.insert_sync(block)
+  @doc "POST: Create a new block (with or without file)"
+  def create(conn, %{block: block, data: data}) do
+    transaction = case data do
+      nil ->
+        DBFS.Blockchain.insert_sync(block)
 
-    with {:ok, %{block: block}} <- transaction do
-      render_block(conn, block)
+      _ ->
+        DBFS.Blockchain.insert_sync(block, data)
     end
-  end
-
-
-  @doc "POST: Create a new block with file"
-  def create(conn, %{data: data, block: block}) do
-    transaction = DBFS.Blockchain.insert_sync(block, data)
 
     with {:ok, %{block: block}} <- transaction do
       render_block(conn, block)
