@@ -10,8 +10,8 @@ defmodule DBFS.Web.Views.API.V1.Block do
   end
 
 
-  def render("show.json", %{block: block}) do
-    block
+  def render("show.json", %{block: block, meta: meta}) do
+    Map.put(block, :meta, meta)
   end
 
 
