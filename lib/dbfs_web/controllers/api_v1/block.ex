@@ -11,7 +11,7 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
   @doc "GET: Block Status"
   def show(conn, %{hash: hash}) do
     with {:ok, block} <- get(hash) do
-      render(conn, :show, block: block)
+      render(conn, :show, block: block, meta: meta(block))
     end
   end
 
@@ -24,7 +24,18 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
   end
 
 
+
   @doc "POST: Create a new block"
+  def create(conn, %{block: block}) do
+    transaction = DBFS.Blockchain.insert_sync(block)
+
+    with {:ok, %{block: block}} <- transaction do
+      render(conn, :show, block: block)
+    end
+  end
+
+
+  @doc "POST: Create a new block with file"
   def create(conn, %{data: data, block: block}) do
     transaction = DBFS.Blockchain.insert_sync(block, data)
 
@@ -41,6 +52,19 @@ defmodule DBFS.Web.Controllers.API.V1.Block do
       nil   -> {:error, :not_found}
       block -> {:ok, block}
     end
+  end
+
+
+  defp meta(block) do
+    # TODO:
+    # Actually return the hash of the next block
+
+    %{
+      deleted: DBFS.Block.is_deleted?(block),
+      last:    DBFS.Block.last.hash,
+      prev:    block.prev,
+      next:    nil,
+    }
   end
 
 end
