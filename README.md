@@ -19,14 +19,14 @@ can check out [here][talk-2018].
 
 [<img src="./media/elixirconf-talk.png" height="300px" />][talk-2018]
 
-I also wrote a [basic whitepaper][whitepaper] detailing the project as part of my semester project, and
-you can also see some screenshots of the application here:
+I also wrote a [basic whitepaper][whitepaper] detailing the application as part of my semester project,
+and you can also see some screenshots of the application here:
 
 <table>
 <tr>
-  <td><img src="./media/screenshot-1.png" height="150px" /></td>
-  <td><img src="./media/screenshot-2.png" height="150px" /></td>
-  <td><img src="./media/screenshot-3.png" height="150px" /></td>
+  <td><img src="./media/screenshot-1.png" height="200px" /></td>
+  <td><img src="./media/screenshot-2.png" height="200px" /></td>
+  <td><img src="./media/screenshot-3.png" height="200px" /></td>
 </tr>
 </table>
 
@@ -64,7 +64,7 @@ You need to have these dependencies installed at minimum:
  - **Erlang/OTP 20.1**
  - **Elixir 1.5.2**
  - **Postgres 9.4**
- - **Node.js 9.6.1** for Yarn
+ - **Node.js 9.6.1** for Assets and Yarn
  - **Ruby 2.3.3** for Sass
 
 Set up the Backend:
