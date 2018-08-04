@@ -125,14 +125,44 @@ $ PORT=4000 yarn start
 
 
 
-[dbfs]:             https://github.com/sheharyarn/dbfs
-[dbfs-web]:         https://github.com/sheharyarn/dbfs-web
-[blog-blockchain]:  https://sheharyar.me/blog/writing-blockchain-elixir/
-[talk-2018]:        https://speakerdeck.com/sheharyar/dbfs-elixirconf-eu-2018-lightning-talk
-[whitepaper]:       https://jmp.sh/83yHQva
-[elixirconf-eu]:    http://elixirconf.eu/
+## Usage
 
-[img-talk]:         ./media/elixirconf-talk.png
-[img-shot-1]:       ./media/screenshot-1.png
-[img-shot-2]:       ./media/screenshot-2.png
-[img-shot-3]:       ./media/screenshot-3.png
+To use the application and upload/download files, they need to be encrypted using your private key. You can
+generate one using `ssh-keygen`:
+
+```bash
+$ ssh-keygen -b 1024 -t rsa -f key -q -N ""
+```
+
+
+
+
+## What's Next?
+
+Nothing. This was just an experiment and a learning experience. I'm not planning on doing any more work on
+this, but you're free to play around and learn from my mistakes (You should absolutely not make the same
+design decisions I made).
+
+
+
+
+## License
+
+All code here is available as open source under the terms of the [MIT License][license].
+
+
+
+
+  [dbfs]:             https://github.com/sheharyarn/dbfs
+  [dbfs-web]:         https://github.com/sheharyarn/dbfs-web
+  [blog-blockchain]:  https://sheharyar.me/blog/writing-blockchain-elixir/
+  [talk-2018]:        https://speakerdeck.com/sheharyar/dbfs-elixirconf-eu-2018-lightning-talk
+  [whitepaper]:       https://jmp.sh/83yHQva
+  [elixirconf-eu]:    http://elixirconf.eu/
+
+
+  [license]:          ./LICENSE
+  [img-talk]:         ./media/elixirconf-talk.png
+  [img-shot-1]:       ./media/screenshot-1.png
+  [img-shot-2]:       ./media/screenshot-2.png
+  [img-shot-3]:       ./media/screenshot-3.png
