@@ -26,7 +26,31 @@ private infrastructure instead of being available publicly.
 
 
 
+## Screenshots and Talk
+
+I gave a lightning talk about the project at the ElixirConf 2018 in Europe, which you can check out
+[here][talk-2018].
+
+[<img src="./media/elixirconf-talk.png" height="400px" />][talk-2018]
+
+You can see some screenshots of the application here:
+
+<table>
+<tr>
+  <td><img src="./media/screenshot-1.png" height="100px" /></td>
+  <td><img src="./media/screenshot-2.png" height="100px" /></td>
+  <td><img src="./media/screenshot-3.png" height="100px" /></td>
+</tr>
+</table>
+
+
+
 [dbfs]:             https://github.com/sheharyarn/dbfs
 [dbfs-web]:         https://github.com/sheharyarn/dbfs-web
 [blog-blockchain]:  https://sheharyar.me/blog/writing-blockchain-elixir/
 [talk-2018]:        https://speakerdeck.com/sheharyar/dbfs-elixirconf-eu-2018-lightning-talk
+
+[img-talk]:         ./media/elixirconf-talk.png
+[img-shot-1]:       ./media/screenshot-1.png
+[img-shot-2]:       ./media/screenshot-2.png
+[img-shot-3]:       ./media/screenshot-3.png
