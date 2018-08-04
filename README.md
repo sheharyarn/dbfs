@@ -46,6 +46,14 @@ The application is designed as a "Private Blockchain" after weighing the pros an
 approaches, and even though it should _absolutely not be used in production_, it is meant to be run on
 private infrastructure instead of being made publicly available so any node can connect.
 
+The `sys.config` file defines 3 nodes. You can change this to add or remove nodes, but you'll have to
+perform the setup on each node (if you're running it on different machines). You'll also have to make
+sure that your `hosts` file points these domains to their correct IPs.
+
+ - `node_1@dbfs.newyork`
+ - `node_2@dbfs.london`
+ - `node_3@dbfs.singapore`
+
 
 
 
@@ -76,6 +84,43 @@ $ cd ~/dbfs-web
 $ yarn install
 ```
 
+For the first node of the backend, we need to create its instance and initialize the blockchain database.
+For other nodes, we can simply create their instances without creating the blockchain (They will
+automatically be synchronized when we start them). Assuming, you're starting all nodes on the same machine:
+
+```bash
+$ cd ~/dbfs
+$ NODE=newyork   PRIMARY=1 mix do ecto.create, ecto.migrate, ecto.seed
+$ NODE=london    PRIMARY=0 mix do ecto.create, ecto.migrate, ecto.seed
+$ NODE=singapore PRIMARY=0 mix do ecto.create, ecto.migrate, ecto.seed
+```
+
+
+
+
+## Get it Running
+
+To finally start the backend nodes, you need to pass them a port, node name and boot-up config. You can
+start one node or multiple, depending on the requirements.
+
+```bash
+$ NODE=newyork PORT=3000 elixir --name node_1@dbfs.newyork --erl "-config sys.config" –S mix phoenix.server
+```
+
+If you decide to run multiple nodes together, you also need to initialize the distributed Mnesia tables
+which are responsible for performing consensus across the network. First enter the REPL command-line of one
+of the running nodes, and enter the following:
+
+```elixir
+iex> DBFS.Consensus.Global.setup
+```
+
+Finally, to start the Web-Client:
+
+```bash
+$ cd ~/dbfs-web
+$ PORT=4000 yarn start
+```
 
 
 
